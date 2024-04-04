@@ -50,7 +50,7 @@ def speech_to_text(audio_file, lang='English'):
 #         response_format="text",
 #         language="en"
 #     )
-print(transcript)
+# print(transcript)
 # from openai import OpenAI
 # client = OpenAI()
 

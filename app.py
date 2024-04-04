@@ -1,7 +1,7 @@
 import streamlit as st
 from logic import image_to_text
 from st_audiorec import st_audiorec
-
+from faster_whisper import WhisperModel
 
 
 
@@ -38,3 +38,16 @@ if wav_audio_data is not None:
     st.audio(wav_audio_data, format='audio/wav')
 #     res = speech_to_text(wav_audio_data, lang=ln)
 # st.audio()
+
+model_size = "tiny"
+
+# model = WhisperModel(model_size, device="cuda", compute_type="int8_float16")
+# or run on CPU with INT8
+# model = WhisperModel(model_size, device="cpu", compute_type="int8")
+
+segments, info = model.transcribe("audio.mp3", beam_size=5)
+
+print("Detected language '%s' with probability %f" % (info.language, info.language_probability))
+
+for segment in segments:
+    print("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, segment.text))
