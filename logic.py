@@ -67,7 +67,7 @@ def speech_to_text(audio_file, lang='English'):
 # ############################# claude #################################
 
 client_2 = Anthropic(api_key=CLAUDE_API_KEY)
-MODEL_NAME = "claude-3-opus-20240229"
+MODEL_NAME = "claude-3-haiku-20240307"
 
 def get_base64_encoded_image(image):
     binary_data = image.read()
