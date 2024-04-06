@@ -4,6 +4,7 @@ import base64
 from openai import OpenAI
 from anthropic import Anthropic
 from dotenv import load_dotenv
+from faster_whisper import WhisperModel
 
 ###### load env ########
 load_dotenv()
@@ -16,51 +17,37 @@ client = OpenAI(api_key=OPEN_API_KEY)
 speech_file_path = Path(__file__).parent / "speech.mp3"
 
 
-def text_to_speech(text: str) -> None:
+
+def text_to_speech_openai(text: str) -> None:
     response = client.audio.speech.create(
     model="tts-1",
     voice="nova",
     input=f"{text}"
     )
-    return response.stream_to_file(speech_file_path)
+    response.stream_to_file(speech_file_path)
+    return 'Success'
 
-def speech_to_text(audio_file, lang='English'):
-    with open(audio_file, "rb") as audio_file:
-        audio_file= open("/path/to/file/german.mp3", "rb")
+def speech_to_text(audio_file):
+    with open(audio_file, "rb") as file:
+        aud_file = open(audio_file, "rb")
         translation = client.audio.translations.create(
         model="whisper-1", 
-        file=audio_file
+        file=aud_file
         )
     return translation.text
 
-# text_1 = 'Hello'
-# text_to_speech(text_1)
-
-# speech_file_path = Path(__file__).parent / "speech.mp3"
-
-
-
-
-############ SPEECH TO TEXT ################################
-
-# with open("Audio/marvin_minsky.mp3", "rb") as audio_file:
-# transcript = openai.Audio.transcribe(
-#         file = audio_file,
-#         model = "whisper-1",
-#         response_format="text",
-#         language="en"
-#     )
-# print(transcript)
-# from openai import OpenAI
-# client = OpenAI()
-
-# audio_file= open("/path/to/file/german.mp3", "rb")
-# translation = client.audio.translations.create(
-#   model="whisper-1", 
-#   file=audio_file
-# )
-# print(translation.text)
-
+############ FAST WHISPER MODEL ###############################
+def speech_to_text_whisper(audio_file_src):
+    model_size = "small"
+    
+    model = WhisperModel(model_size, device="cpu", compute_type="int8")
+    
+    segments, info = model.transcribe(audio_file_src, beam_size=5)
+    text_list = []
+    for segment in segments:
+        text_list.append(segment.text)
+    text = ' '.join(text_list)
+    return text
 
 
 
@@ -75,15 +62,14 @@ def get_base64_encoded_image(image):
     base64_string = base_64_encoded_data.decode('utf-8')
     return base64_string
 
-def image_to_text(img, lang='English'):
-
+def image_to_text(img):
     message_list = [
         {
             "role": 'user',
             "content": [
                 {"type": "image", "source": {"type": "base64",
                                              "media_type": "image/jpeg", "data": get_base64_encoded_image(img)}},
-                {"type": "text", "text": f"Briefly describe this image in {lang}?"}
+                {"type": "text", "text": f"Transcribe this text. Only output the text and nothing else?"}
             ]
         }
     ]
