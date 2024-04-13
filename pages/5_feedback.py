@@ -19,7 +19,7 @@ except:
 
 with st.container(border=True):
     try:
-        st.write(st.session_state['ai_response'])
+        st.markdown(st.session_state['ai_response'])
     except:
         pass
 
