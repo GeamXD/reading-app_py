@@ -13,13 +13,13 @@ st.caption('Provide feedback on the accuracy of the spoken text.')
 
 try:
     score = st.session_state.get('reading_score')
-    st.markdown(f'#### Score: {score}')
+    st.markdown(f'#### Reading Score: {score}')
 except:
     pass
 
 with st.container(border=True):
     try:
-        st.markdown(st.session_state['ai_response'])
+        st.write(st.session_state['ai_response'])
     except:
         pass
 

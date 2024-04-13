@@ -50,7 +50,8 @@ def start_reading(page_Text):
         
         # replace with something visually appealing
         with st.container(border=True):
-            st.write('Transcribed Text: ', transcribed_text)
+            st.subheader('Transcribed Text')
+            st.write(transcribed_text)
         
         # Get text from images
         # page_Text = get_text()
@@ -75,7 +76,8 @@ def start_reading(page_Text):
 
         ## Writes ai response
         with st.container(border=True):
-            st.write('AI response: ', ai_response)
+            st.subheader('AI Response')
+            st.write(ai_response)
 
 page_text = get_text()
 start_reading(page_Text=page_text)
