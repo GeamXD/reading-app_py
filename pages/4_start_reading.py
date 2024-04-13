@@ -2,7 +2,7 @@ import base64
 import streamlit as st
 from audio_recorder_streamlit import audio_recorder
 import logic as lg
-# from st_audiorec import st_audiorec 
+from st_audiorec import st_audiorec
 
 st.set_page_config(
     page_title="Start Reading",
@@ -37,7 +37,7 @@ def start_reading(page_Text):
     st.subheader('Start reading')
     
     ### initiates recorder
-    recorded_audio = audio_recorder()
+    recorded_audio = st_audiorec()
 
     ### Check if recorded audio is available
     if recorded_audio:
