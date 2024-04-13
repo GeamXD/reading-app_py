@@ -10,24 +10,24 @@ st.set_page_config(
 st.title('Feedback')
 st.caption('Provide feedback on the accuracy of the spoken text.')
 
-score = st.session_state.get('reading_score')
-if score:
+
+try:
+    score = st.session_state.get('reading_score')
     st.markdown(f'#### Score: {score}')
+except:
+    pass
 
 with st.container(border=True):
-    if st.session_state.get('ai_response'):
+    try:
         st.write(st.session_state['ai_response'])
-
+    except:
+        pass
 
 
 bt_1, bt_2, bt_3 = st.columns(3)
 with bt_1:
     if st.button('Retake Exercise', use_container_width=True):
     # remove all photos from session state
-        st.session_state['photo_1'] = None
-        st.session_state['photo_2'] = None
-        st.session_state['photo_3'] = None
-        st.session_state['photo_4'] = None
         st.session_state['ai_response'] = None
         st.session_state['reading_score'] = None
     # switch to pages/2_TakePhoto_1.py

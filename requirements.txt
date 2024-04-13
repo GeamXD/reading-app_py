@@ -41,7 +41,6 @@ pandas==2.2.1
 pillow==10.3.0
 protobuf==4.25.3
 pyarrow==15.0.2
-PyAudio @ file:///home/conda/feedstock_root/build_artifacts/pyaudio_1699365170463/work
 pydantic==2.6.4
 pydantic_core==2.16.3
 pydeck==0.8.1b0

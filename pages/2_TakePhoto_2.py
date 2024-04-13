@@ -8,12 +8,12 @@ st.set_page_config(
 
 
 st.markdown('##### Take a Picture')
-picture = st.camera_input("", label_visibility='collapsed')
+picture = st.camera_input("Image Captured", label_visibility='collapsed')
 
 if picture:
-    st.session_state['photo_2'] = picture 
-    st.session_state['photo_collection'] = {'photo_2': picture}
-
+    with open('captured/image_2.jpg', 'wb') as f:
+        pic = picture.read()
+        f.write(pic)
 
 bt_1, bt_2, bt_3 = st.columns(3)
 with bt_1:

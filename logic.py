@@ -20,6 +20,14 @@ def openai_client(api_key):
     return OpenAI(api_key=api_key)
 
 
+def delete_file(file_path):
+    
+    try:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+    except:
+        pass
+
 def speech_to_text(audio_path):
     client = openai_client(OPEN_API_KEY)
     with open(audio_path, "rb") as audio_file:
@@ -38,21 +46,20 @@ def text_to_speech(text, audio_path) -> None:
     )
     response.stream_to_file(audio_path)
 
-def get_base64_encoded_image(image):
-    binary_data = image.read()
-    base_64_encoded_data = base64.b64encode(binary_data)
-    base64_string = base_64_encoded_data.decode('utf-8')
-    return base64_string
+def get_base64_encoded_image(image_path):
+    with open(image_path, "rb") as img_file:
+        encoded_string = base64.b64encode(img_file.read())
+    return encoded_string.decode("utf-8")
 
-def image_to_text(img):
-
+def image_to_text(image_path):
+    """Transcribe image to text"""
     client = claude_client(CLAUDE_API_KEY)
     message_list = [
         {
             "role": 'user',
             "content": [
                 {"type": "image", "source": {"type": "base64",
-                                             "media_type": "image/jpeg", "data": get_base64_encoded_image(img)}},
+                                             "media_type": "image/jpeg", "data": get_base64_encoded_image(image_path)}},
                 {"type": "text", "text": "Transcribe this to text. Only output the text and nothing else?"}
             ]
         }

@@ -10,13 +10,16 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="collapsed")
 
-page_Text = {}
+# page_Text = {}
 
-for i in range(1, 5):
-    if st.session_state.get(f'photo_{i}'):
-        page_Text[f'page_{i}'] = lg.image_to_text(st.session_state.get(f'photo_{i}'))
-
-st.session_state['image_to_text_dict'] = page_Text
+def get_text():
+    page_text = {}
+    for i in range(1, 5):
+        try:
+            page_text[f'page_{i}'] = lg.image_to_text(f'captured/image_{i}.jpg')
+        except Exception as e:
+            print(e)
+    return page_text
 
 # Auto play function
 def auto_play_audio(audio_file):
@@ -30,7 +33,7 @@ def auto_play_audio(audio_file):
 
 
 ######## Front-end #########
-def start_reading():
+def start_reading(page_Text):
     st.subheader('Start reading')
     
     ### initiates recorder
@@ -48,6 +51,9 @@ def start_reading():
         # replace with something visually appealing
         with st.container(border=True):
             st.write('Transcribed Text: ', transcribed_text)
+        
+        # Get text from images
+        # page_Text = get_text()
 
         # Get Comparison from ai
         ai_response, ai_score = lg.feedback(page_Text, transcribed_text)
@@ -71,58 +77,14 @@ def start_reading():
         with st.container(border=True):
             st.write('AI response: ', ai_response)
 
-start_reading()
-
-
+page_text = get_text()
+start_reading(page_Text=page_text)
 
 bt_1, bt_2, bt_3 = st.columns(3)
 with bt_1:
     if st.button('Feedback', use_container_width=True):
-        st.switch_page('pages/4_start_reading.py')
+        st.switch_page('pages/5_feedback.py')
 with bt_3:
     if st.button('Go to Overview', use_container_width=True):
         st.switch_page('pages/3_overview.py')
 
-
-
-
-# if st.session_state.get('photo_1'):
-#     try:
-#         page_Text = {
-#         'page_1': lg.image_to_text(st.session_state.get('photo_1'))
-#         }
-#         st.session_state['converted'] = True
-#     except Exception as e:
-#         st.warning(e)
-# elif st.session_state.get('photo_1') and st.session_state.get('photo_2'):
-#     try:
-#         page_Text = {
-#         'page_1': lg.image_to_text(st.session_state.get('photo_1')),
-#         'page_2': lg.image_to_text(st.session_state.get('photo_2'))
-#         }
-#         st.session_state['converted'] = True
-#     except Exception as e:
-#         st.warning(e)
-
-# if st.session_state.get('photo_1') and st.session_state.get('photo_2') and st.session_state.get('photo_3'):
-#     try:
-#         page_Text = {
-#         'page_1': lg.image_to_text(st.session_state.get('photo_1')),
-#         'page_2': lg.image_to_text(st.session_state.get('photo_2')),
-#         'page_3': lg.image_to_text(st.session_state.get('photo_3'))
-#         }
-#         st.session_state['converted'] = True
-#     except Exception as e:
-#         st.warning(e)
-
-# if st.session_state.get('photo_1') and st.session_state.get('photo_2') and st.session_state.get('photo_3') and st.session_state.get('photo_4'):
-#     try:
-#         page_Text = {
-#         'page_1': lg.image_to_text(st.session_state.get('photo_1')),
-#         'page_2': lg.image_to_text(st.session_state.get('photo_2')),
-#         'page_3': lg.image_to_text(st.session_state.get('photo_3')),
-#         'page_4': lg.image_to_text(st.session_state.get('photo_4'))
-#         }
-#         st.session_state['converted'] = True
-#     except Exception as e:
-#         st.warning(e)
